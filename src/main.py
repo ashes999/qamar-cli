@@ -7,7 +7,7 @@ class Main:
 
     def __init__(self):
         self.valid_commands = {
-            "create": self.create_template
+            "create": self.create_example
         }
 
     def execute(self, args):
@@ -23,23 +23,23 @@ class Main:
                 args = args[1:]
                 self.valid_commands[command](args)
 
-    def create_template(self, *args):
+    def create_example(self, *args):
         args = [a for a in args[0]]
         x= ""        
-        templates = [f[0:f.rindex('.')] for f in os.listdir('templates') if f.endswith('.zip')]
+        examples = [f[0:f.rindex('.')] for f in os.listdir('examples') if f.endswith('.zip')]
         if len(args) != 2:
-            print "Usage: create <template> <target directory>. Valid templates are: {0}".format(templates)
+            print "Usage: create <example> <target directory>. Valid examples are: {0}".format(examples)
             sys.exit(1)            
         else:
-            template = args[0]
+            example = args[0]
             destination = args[1]
-            zip_candidates = [f for f in templates if f.lower() == template.lower()]
+            zip_candidates = [f for f in examples if f.lower() == example.lower()]
             if len(zip_candidates) != 1:
-                print("'{0}' doesn't seem to be a valid templates. Templates are: {1}'".format(template, templates))
+                print("'{0}' doesn't seem to be a valid examples. Examples are: {1}'".format(example, examples))
                 sys.exit(1)            
             else:
                 zip_name = zip_candidates[0]
                 Directory.ensure_exists(destination)
-                with ZipFile('templates/{0}.zip'.format(zip_name), 'r') as template_zip:
-                    template_zip.extractall(destination)
-                print("Created template for {0} at {1}".format(template, destination))
+                with ZipFile('examples/{0}.zip'.format(zip_name), 'r') as example_zip:
+                    example_zip.extractall(destination)
+                print("Created example for {0} at {1}".format(example, destination))
